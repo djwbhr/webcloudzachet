@@ -1,8 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_restx import Api, Resource
+import json
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Evseev Zachet')
+api = Api(app, title='Evseev Zachet')
 
 @api.route('/add/<number1>/<number2>')
 class Addition(Resource):
@@ -11,11 +12,9 @@ class Addition(Resource):
             num1 = float(number1)
             num2 = float(number2)
             result = num1 + num2
-            return jsonify({'status': True, 'answer': f'{result:.4f}'})
+            return json.dumps({'status': True, 'answer': f'{result:.4f}'})
         except ValueError:
-            return jsonify({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'}), 400
-        except Exception as e:
-            return jsonify({'status': False, 'answer': f'ERROR: {str(e)}'}), 400
+            return json.dumps({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'}), 400
 
 @api.route('/sub/<number1>/<number2>')
 class Subtraction(Resource):
@@ -24,11 +23,9 @@ class Subtraction(Resource):
             num1 = float(number1)
             num2 = float(number2)
             result = num1 - num2
-            return jsonify({'status': True, 'answer': f'{result:.4f}'})
+            return json.dumps({'status': True, 'answer': f'{result:.4f}'})
         except ValueError:
-            return jsonify({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'}), 400
-        except Exception as e:
-            return jsonify({'status': False, 'answer': f'ERROR: {str(e)}'}), 400
+            return json.dumps({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'}), 400
 
 @api.route('/mul/<number1>/<number2>')
 class Multiplication(Resource):
@@ -37,11 +34,9 @@ class Multiplication(Resource):
             num1 = float(number1)
             num2 = float(number2)
             result = num1 * num2
-            return jsonify({'status': True, 'answer': f'{result:.4f}'})
+            return json.dumps({'status': True, 'answer': f'{result:.4f}'})
         except ValueError:
-            return jsonify({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'}), 400
-        except Exception as e:
-            return jsonify({'status': False, 'answer': f'ERROR: {str(e)}'}), 400
+            return json.dumps({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'})
 
 @api.route('/div/<number1>/<number2>')
 class Division(Resource):
@@ -50,15 +45,11 @@ class Division(Resource):
             num1 = float(number1)
             num2 = float(number2)
             if num2 == 0:
-                raise ZeroDivisionError('DIVISION_BY_ZERO')
+                return json.dumps({'status': False, 'answer': 'DIVISION_BY_ZERO'})
             result = num1 / num2
-            return jsonify({'status': True, 'answer': f'{result:.4f}'})
+            return json.dumps({'status': True, 'answer': f'{result:.4f}'})
         except ValueError:
-            return jsonify({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'}), 400
-        except ZeroDivisionError:
-            return jsonify({'status': False, 'answer': 'DIVISION_BY_ZERO'}), 400
-        except Exception as e:
-            return jsonify({'status': False, 'answer': f'ERROR: {str(e)}'}), 400
+            return json.dumps({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'})
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True)
