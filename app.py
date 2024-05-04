@@ -52,4 +52,4 @@ class Division(Resource):
             return json.dumps({'status': False, 'answer': 'ARGS_PARSING_ERROR: Invalid numbers provided'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
